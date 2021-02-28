@@ -59,12 +59,13 @@ menus:
 					history = append(history, divides(number1, number2, &number1))
 				default:
 					fmt.Println("Invalid Operation")
-					break Calculator
+					// break Calculator
+					continue
 				}
 				i++
 				// history = append(history, total)
 
-				fmt.Printf("Result : %.1f", number1)
+				fmt.Printf("Result : %.1f\n", number1)
 				// number1 = total
 			}
 		case 2:
