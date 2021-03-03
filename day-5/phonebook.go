@@ -15,11 +15,8 @@ func main() {
 
 	/* Declare variables */
 	// Declare struct
-	
-	
-	
+
 	var phoneBookList = []phoneBook{}
-	
 
 	// Variables needed
 	var keyword string
@@ -61,14 +58,11 @@ menus:
 				fmt.Printf("\n")
 				fmt.Print("Enter Phone Number: ")
 				fmt.Scanln(&phone.phoneNumber)
-				if len(phone.phoneNumber) < 10 {
+				if len(phone.phoneNumber) < 10 || isNum(phone.phoneNumber) == false {
 					fmt.Printf("\n")
 					fmt.Println("Phone Number cannot be Less Than 10 Digits!")
-					fmt.Println("Your input :" , phone.phoneNumber)
-				} else if isNum(phone.phoneNumber) == false {
-					fmt.Printf("\n")
 					fmt.Println("Phone Number must be Numeric!")
-					fmt.Println("Your input :" , phone.phoneNumber)
+					fmt.Println("Your input :", phone.phoneNumber)
 				} else {
 					break
 				}
@@ -80,7 +74,7 @@ menus:
 				fmt.Scanln(&phone.email)
 				if isEmail(phone.email) == false {
 					fmt.Println("Email Must be an Email!")
-					fmt.Println("Your Email :" , phone.email)
+					fmt.Println("Your Email :", phone.email)
 				} else {
 					break
 				}
@@ -116,22 +110,17 @@ menus:
 				}
 			}
 
-			if search == true { 
+			if search == true {
 				// status = true
 				for {
 					fmt.Printf("\n")
 					fmt.Print("Enter Phone Number: ")
-					fmt.Scanln(&number)
-					fmt.Println(len(number))
-					if len(number) < 10 {
+					fmt.Scanln(&phone.phoneNumber)
+					if len(phone.phoneNumber) < 10 || isNum(phone.phoneNumber) == false {
 						fmt.Printf("\n")
 						fmt.Println("Phone Number cannot be Less Than 10 Digits!")
-						fmt.Println("Your input :" , number)
-						
-					}else if isNum(number) == false {
-						fmt.Printf("\n")
 						fmt.Println("Phone Number must be Numeric!")
-						fmt.Println("Your input :" , number)
+						fmt.Println("Your input :", phone.phoneNumber)
 					} else {
 						break
 					}
@@ -192,11 +181,11 @@ func showPhoneBook(phoneBookList []phoneBook) {
 }
 
 func isNum(phoneNumber string) bool {
-	isStringNumeric,_ := regexp.MatchString(`^[\d]+$`, phoneNumber)
+	isStringNumeric, _ := regexp.MatchString(`^[\d]+$`, phoneNumber)
 	return isStringNumeric
 }
 
 func isEmail(email string) bool {
-	isStringEmail,_ := regexp.MatchString("^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$", email)
+	isStringEmail, _ := regexp.MatchString("^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$", email)
 	return isStringEmail
 }
