@@ -6,16 +6,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type getBodyUserData struct {
-	FullName string `json:"fullName"`
-}
-
 //GetUserData func
 func GetUserData(c *gin.Context) {
-	var body getBodyUserData
-	err := c.Bind(&body)
+	// var body getBodyUserData
+	email := c.Query("email")
+	err := c.Bind(&email)
 	if err != nil {
-		fmt.Println("Can't get data!")
+		fmt.Println("Wrong Email")
 	}
 
 	// response
@@ -23,7 +20,9 @@ func GetUserData(c *gin.Context) {
 		"status":   "success",
 		"messages": "Successfully Get Data.",
 		"data": map[string]interface{}{
-			"full_name": body.FullName,
+			"full_name": "Sahlan Nasution",
+			"email":     email,
+			"role":      "user",
 		},
 	})
 }
