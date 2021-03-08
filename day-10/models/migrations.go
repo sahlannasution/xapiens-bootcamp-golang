@@ -19,10 +19,10 @@ func Migrations(db *gorm.DB) {
 		fmt.Println("Movies Table has been created!")
 	}
 
-	// if check := db.Migrator().HasTable(&Genres{}); !check {
-	// 	db.Migrator().CreateTable(&Genres{})
-	// 	fmt.Println("Genre Table has been created!")
-	// }
+	if check := db.Migrator().HasTable(&Genres{}); !check {
+		db.Migrator().CreateTable(&Genres{})
+		fmt.Println("Genre Table has been created!")
+	}
 
 	if check := db.Migrator().HasTable(&MovieGenres{}); !check {
 		db.Migrator().CreateTable(&MovieGenres{})

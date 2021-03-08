@@ -16,21 +16,15 @@ func (StrDB *StrDB) AddMoviesGenre(c *gin.Context) {
 	)
 
 	movieID, _ := strconv.ParseInt(c.PostForm("moviesID"), 10, 64)
-	// genreID, _ := strconv.ParseInt(c.PostForm("genresID"), 10, 64)
+	genresID, _ := strconv.ParseInt(c.PostForm("genresID"), 10, 64)
 
 	movieGenre.MoviesID = uint(movieID)
-	// movieGenre.GenresID = uint(genreID)
+	movieGenre.GenresID = uint(genresID)
 	StrDB.DB.Create(&movieGenre)
 	result = gin.H{
 		"status":  "success",
 		"message": "Sucessfully Added Data!",
 		"data":    movieGenre,
-		// "data": map[string]interface{}{
-		// 	"id":      movies.ID,
-		// 	"title":   movies.Title,
-		// 	"year":    movies.Year,
-		// 	"ratings": movies.Ratings,
-		// },
 	}
 
 	c.JSON(http.StatusOK, result)

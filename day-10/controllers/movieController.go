@@ -48,16 +48,16 @@ func (StrDB *StrDB) AddMovies(c *gin.Context) {
 // GetMoviesList func
 func (StrDB *StrDB) GetMoviesList(c *gin.Context) {
 	var (
-		movieGenre []models.MovieGenres
-		result     gin.H
+		movies []models.Movies
+		result gin.H
 	)
 
 	// StrDB.DB.Find(&movies)
-	StrDB.DB.Find(&movieGenre)
+	StrDB.DB.Preload("Genres").Find(&movies)
 	result = gin.H{
 		"status":  "success",
 		"message": "Successfully Get Movies List",
-		"data":    movieGenre,
+		"data":    movies,
 	}
 
 	c.JSON(http.StatusOK, result)
