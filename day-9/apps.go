@@ -25,7 +25,9 @@ func main() {
 
 	routing.POST("/register", strDB.Register)
 	routing.POST("/signin", strDB.Signin)
+	routing.GET("/user/:email", strDB.GetUserData)
+	routing.PUT("/user/:email", strDB.UpdateUser)
 	// routing.GET("/vendorList", strDB.GetVendorList)
 	// routing.GET("/VendorByQuery", strDB.GetDataVendor)
-	routing.Run()
+	routing.Run(":6969")
 }

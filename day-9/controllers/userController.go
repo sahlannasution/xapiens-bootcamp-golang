@@ -8,6 +8,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Users struct
+type Users struct {
+	ID       string `gorm:"primarykey" json:"id"`
+	Email    string `gorm:"primarykey" json:"email"`
+	FullName string `json:"fullName"`
+	Role     string `json:"role"`
+	// gorm.Model
+}
+
 // Register func
 func (StrDB *StrDB) Register(c *gin.Context) {
 	var (
@@ -37,22 +46,59 @@ func (StrDB *StrDB) Register(c *gin.Context) {
 // Signin func
 func (StrDB *StrDB) Signin(c *gin.Context) {
 	var (
-		users  models.Users
+		users  Users
 		result gin.H
 	)
+	email := c.PostForm("email")
+	password := c.PostForm("password")
 
-	// fmt.Println(c.Bind(&users))
-	if err := c.Bind(&users); err != nil {
-		fmt.Println("Error can't Login!")
-	} else {
-		email := c.PostForm("email")
-		password := c.PostForm("password")
-		StrDB.DB.Find(&users, "email = ? AND password = ?", email, password)
-		result = gin.H{
-			"status":  "success",
-			"message": "Sucessfully Login!",
-			"data":    users,
-		}
+	StrDB.DB.Find(&users, "email = ? AND password = ?", email, password)
+
+	result = gin.H{
+		"status":  "success",
+		"message": "Sucessfully Login!",
+		"data":    users,
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
+// GetUserData func
+func (StrDB *StrDB) GetUserData(c *gin.Context) {
+	var (
+		users  Users
+		result gin.H
+	)
+	email := c.Param("email")
+
+	StrDB.DB.Find(&users, "email = ?", email)
+
+	result = gin.H{
+		"status":  "success",
+		"message": "Sucessfully Get Data!",
+		"data":    users,
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
+// UpdateUser func
+func (StrDB *StrDB) UpdateUser(c *gin.Context) {
+	var (
+		users  Users
+		result gin.H
+	)
+	email := c.Param("email")
+	fullName := c.PostForm("fullName")
+
+	// StrDB.DB.Find(&users, "email = ? AND password = ?", email, password)
+	StrDB.DB.Where("email = ?", email).Find(&users)
+	users.FullName = fullName
+	StrDB.DB.Save(&users)
+	result = gin.H{
+		"status":  "success",
+		"message": "Sucessfully Login!",
+		"data":    users,
 	}
 
 	c.JSON(http.StatusOK, result)
