@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"xapiens-bootcamp-golang/day-10/models"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,7 +16,7 @@ type Genres struct {
 // AddGenre func
 func (StrDB *StrDB) AddGenre(c *gin.Context) {
 	var (
-		genre  Genres
+		genre  models.Genres
 		result gin.H
 	)
 	name := c.PostForm("name")
