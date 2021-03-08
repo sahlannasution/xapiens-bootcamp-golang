@@ -102,34 +102,3 @@ func (StrDB *StrDB) UpdateUser(c *gin.Context) {
 
 	c.JSON(http.StatusOK, result)
 }
-
-// func (StrDB *StrDB) GetVendorList(c *gin.Context) {
-// 	var (
-// 		vendor []models.Vendor
-// 		result gin.H
-// 	)
-
-// 	StrDB.DB.Find(&vendor)
-// 	result = gin.H{
-// 		"msg":  "success",
-// 		"data": vendor,
-// 	}
-
-// 	c.JSON(http.StatusOK, result)
-// }
-
-// // GetDataVendor
-// func (StrDB *StrDB) GetDataVendor(c *gin.Context) {
-// 	var (
-// 		vendor []models.Vendor
-// 		result gin.H
-// 	)
-
-// 	StrDB.DB.Find(&vendor, "vendor_id = ?", c.Query("vendorID"))
-// 	result = gin.H{
-// 		"msg":  "success",
-// 		"data": vendor,
-// 	}
-
-// 	c.JSON(http.StatusOK, result)
-// }

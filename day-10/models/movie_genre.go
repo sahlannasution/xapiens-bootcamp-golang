@@ -8,7 +8,5 @@ type MovieGenres struct {
 	Movies   []Movies `gorm:"foreignKey:ID" json:"movie"`
 	GenresID uint     `gorm:"primarykey" json:"genre_id"`
 	Genres   []Genres `gorm:"foreignKey:ID" json:"genre"`
-	// MovieName string `json:"name"`
-	// GenresID uint `json:"genres_id"`
 	gorm.Model
 }
