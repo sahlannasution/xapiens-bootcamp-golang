@@ -9,5 +9,6 @@ type Users struct {
 	Password string `json:"password"`
 	FullName string `json:"fullName"`
 	Role     string `json:"role"`
+	// Reviews  []Reviews
 	gorm.Model
 }

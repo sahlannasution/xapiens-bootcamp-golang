@@ -8,5 +8,6 @@ type Movies struct {
 	Year    int      `json:"year"`
 	Ratings int      `json:"ratings"`
 	Genres  []Genres `gorm:"many2many:movie_genres" json:"genres"`
+	// Reviews []Reviews
 	gorm.Model
 }

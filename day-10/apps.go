@@ -40,9 +40,13 @@ func main() {
 
 	/* Movies Genre Routes */
 	routing.POST("/movies/genre", strDB.AddMoviesGenre)
-	// routing.GET("/movies/genre", strDB.GetMoviesGenre)
-
 	/* End Movies Genre Routes */
+
+	/* Review Routes */
+	routing.POST("/review", strDB.AddReview)
+	routing.GET("/review/:movie_id", strDB.GetReviewByMovie)
+	routing.GET("/reviews/detail/:review_id", strDB.GetReviewDetail)
+	/* End Review Routes */
 
 	routing.Run(":6969")
 }
