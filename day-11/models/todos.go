@@ -8,8 +8,8 @@ import (
 
 // Todos struct
 type Todos struct {
-	UserID    uint   `json:"user_id"`
 	ID        uint   `gorm:"primarykey" json:"id"`
+	UserID    uint   `json:"userId"`
 	Title     string `json:"title"`
 	Completed bool   `json:"completed"`
 	CreatedAt time.Time

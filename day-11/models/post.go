@@ -8,8 +8,8 @@ import (
 
 // Post struct
 type Post struct {
-	UserID    uint   `json:"user_id"`
 	ID        uint   `gorm:"primarykey" json:"id"`
+	UserID    uint   `json:"userId"`
 	Title     string `json:"title"`
 	Body      string `json:"body"`
 	CreatedAt time.Time

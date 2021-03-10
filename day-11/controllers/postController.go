@@ -31,31 +31,17 @@ func (StrDB *StrDB) Post(c *gin.Context) {
 		fmt.Println(err.Error())
 	}
 
-	// Post struct
-	type Post struct {
-		UserID uint   `json:"user_id"`
-		ID     uint   `json:"id"`
-		Title  string `json:"title"`
-		Body   string `json:"body"`
-	}
-
 	fmt.Println(body)
 	fmt.Println("==============================")
 	fmt.Println(string(body)) // convert body yang valuenya byte menjadi string
 	// sb := string(body)        // convert body yang valuenya byte menjadi string
-	data := Post{}
 
 	// unmarshal dari hasil get api
 	// unmarshall itu adalah convert dari tipe data .... ke bentuk JSON / object
-	if error := json.Unmarshal(body, &data); error != nil {
+	if error := json.Unmarshal(body, &post); error != nil {
 		fmt.Println("Error ", err.Error())
 	}
-	fmt.Println(data)
-
-	post.UserID = data.UserID
-	post.ID = data.ID
-	post.Title = data.Title
-	post.Body = data.Body
+	fmt.Println(post)
 	StrDB.DB.Create(&post)
 
 	result = gin.H{

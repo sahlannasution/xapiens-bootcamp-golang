@@ -31,31 +31,18 @@ func (StrDB *StrDB) Todos(c *gin.Context) {
 		fmt.Println(err.Error())
 	}
 
-	// Todos struct
-	type Todos struct {
-		UserID    uint   `json:"user_id"`
-		ID        uint   `gorm:"primarykey" json:"id"`
-		Title     string `json:"title"`
-		Completed bool   `json:"completed"`
-	}
-
 	fmt.Println(body)
 	fmt.Println("==============================")
 	fmt.Println(string(body)) // convert body yang valuenya byte menjadi string
 	// sb := string(body)        // convert body yang valuenya byte menjadi string
-	data := Todos{}
 
 	// unmarshal dari hasil get api
 	// unmarshall itu adalah convert dari tipe data .... ke bentuk JSON / object
-	if error := json.Unmarshal(body, &data); error != nil {
+	if error := json.Unmarshal(body, &todos); error != nil {
 		fmt.Println("Error ", err.Error())
 	}
-	fmt.Println(data)
+	fmt.Println(todos)
 
-	todos.UserID = data.UserID
-	todos.ID = data.ID
-	todos.Title = data.Title
-	todos.Completed = data.Completed
 	StrDB.DB.Create(&todos)
 
 	result = gin.H{

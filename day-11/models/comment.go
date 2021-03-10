@@ -8,8 +8,8 @@ import (
 
 // Comment struct
 type Comment struct {
-	PostID    uint   `json:"post_id"`
 	ID        uint   `gorm:"primarykey" json:"id"`
+	PostID    uint   `json:"postId"`
 	Name      string `json:"name"`
 	Email     string `json:"email"`
 	Body      string `json:"body"`
