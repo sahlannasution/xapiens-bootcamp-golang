@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"xapiens-bootcamp-golang/day-11/models"
+	"xapiens-bootcamp-golang/day-12/models"
 
 	"github.com/gin-gonic/gin"
 )
