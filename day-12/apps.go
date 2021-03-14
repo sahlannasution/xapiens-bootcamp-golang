@@ -5,10 +5,10 @@ import (
 	// "xapiens-bootcamp-golang-day-11/controllers"
 	// "xapiens-bootcamp-golang-day-11/models"
 
-	"log"
+	"fmt"
 	"xapiens-bootcamp-golang/day-12/config"
 	"xapiens-bootcamp-golang/day-12/controllers"
-	middlewares "xapiens-bootcamp-golang/day-12/middlewares/auth"
+	auth "xapiens-bootcamp-golang/day-12/middlewares/auth"
 	"xapiens-bootcamp-golang/day-12/models"
 
 	jwt "github.com/appleboy/gin-jwt"
@@ -16,6 +16,7 @@ import (
 )
 
 func main() {
+	// Sentry()
 	// koneksi ke database postgree
 	dbPG := config.Connection()
 	strDB := controllers.StrDB{DB: dbPG}
@@ -27,48 +28,47 @@ func main() {
 	routing := gin.Default()
 
 	// routing.POST("/login", authMiddlewares.LoginHandler)
-	routing.POST("/login", middlewares.MiddleWare().LoginHandler)
+	routing.POST("/login", auth.MiddleWare().LoginHandler)
 
-	routing.NoRoute(middlewares.MiddleWare().MiddlewareFunc(), func(c *gin.Context) {
-		claims := jwt.ExtractClaims(c)
-		log.Printf("NoRoute claims: %#v\n", claims)
+	routing.NoRoute(auth.MiddleWare().MiddlewareFunc(), func(c *gin.Context) {
+		fmt.Println(jwt.ExtractClaims(c))
+		// claims := jwt.ExtractClaims(c)
+
+		// log.Printf("NoRoute claims: %#v\n", claims)
 		c.JSON(404, gin.H{"code": "PAGE_NOT_FOUND", "message": "Page not found"})
 	})
 
 	requests := routing.Group("/requests")
 
-	requests.Use(middlewares.MiddleWare().MiddlewareFunc())
+	requests.Use(auth.MiddleWare().MiddlewareFunc())
 	{
 
 		requests.GET("/post", strDB.Post)
 		requests.GET("/comment", strDB.Comment)
 		requests.GET("/todos", strDB.Todos)
-		// auth.GET("/hello", func(c *gin.Context) {
-		// 	c.JSON(200, gin.H{
-		// 		"text": "Berhasil masuk ke JWT",
-		// 	})
-		// })
 
-		// auth.GET("/vendorList", strDB.GetVendorList)
-
-		// // routing vendor
-		// auth.POST("/vendor", strDB.PostDataVendor)
-
-		// auth.GET("/VendorByQuery", strDB.GetDataVendor)
-
-		// // routing employee
-		// auth.POST("/employee", strDB.PostDataEmployee)
-		// auth.GET("/employeeList", strDB.GetEmployeeList)
-
-		// // routing upload files
-		// auth.POST("/uploadFile", controller.UploadSingleFile)
-		// auth.POST("/uploadMultipleFile", controller.UploadMultipleFile)
-
-		// //routing 3rd api / http request
-		// auth.GET("/post", controller.HttpRequest)
 	}
-
-	//routing 3rd api / http request
 
 	routing.Run()
 }
+
+// func Sentry() {
+// 	var dsnSentry string
+
+// 	if err := godotenv.Load(".env"); err != nil {
+// 		// fmt.Println("This is the Error : ", err)
+// 		sentry.CaptureException(err)
+// 		log.Fatalf(err.Error())
+// 	} else {
+// 		dsnSentry = os.Getenv("DSN_SENTRY")
+// 	}
+// 	err := sentry.Init(sentry.ClientOptions{
+// 		Dsn: dsnSentry,
+// 	})
+// 	if err != nil {
+// 		log.Fatalf("sentry.Init: %s", err)
+// 	}
+// 	defer sentry.Flush(2 * time.Second)
+
+// 	sentry.CaptureMessage("It works!")
+// }

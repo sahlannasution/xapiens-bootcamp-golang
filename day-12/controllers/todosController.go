@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	logging "xapiens-bootcamp-golang/day-12/log"
 	"xapiens-bootcamp-golang/day-12/models"
 
 	"github.com/gin-gonic/gin"
@@ -22,6 +23,7 @@ func (StrDB *StrDB) Todos(c *gin.Context) {
 	// check kondisi saat ambil data dari api error / tidak
 	if err != nil { // ini kalau error
 		fmt.Println(err.Error())
+		logging.Sentry(err)
 	}
 
 	body, err := ioutil.ReadAll(resp.Body)
