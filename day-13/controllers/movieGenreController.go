@@ -3,7 +3,8 @@ package controllers
 import (
 	"net/http"
 	"strconv"
-	"xapiens-bootcamp-golang/day-10/models"
+	logger "xapiens-bootcamp-golang/day-13/log"
+	"xapiens-bootcamp-golang/day-13/models"
 
 	"github.com/gin-gonic/gin"
 )
@@ -20,12 +21,21 @@ func (StrDB *StrDB) AddMoviesGenre(c *gin.Context) {
 
 	movieGenre.MoviesID = uint(movieID)
 	movieGenre.GenresID = uint(genresID)
-	StrDB.DB.Create(&movieGenre)
-	result = gin.H{
-		"status":  "success",
-		"message": "Sucessfully Added Data!",
-		"data":    movieGenre,
+	if res := StrDB.DB.Create(&movieGenre); res.Error != nil {
+		err := res.Error
+		result = gin.H{
+			"status":  "Bad Request",
+			"message": "Cant Process the Data!",
+			"errors":  err.Error(),
+		}
+		c.JSON(http.StatusBadRequest, result)
+		logger.Sentry(err)
+	} else {
+		result = gin.H{
+			"status":  "success",
+			"message": "Sucessfully Added Data!",
+			"data":    movieGenre,
+		}
+		c.JSON(http.StatusOK, result)
 	}
-
-	c.JSON(http.StatusOK, result)
 }

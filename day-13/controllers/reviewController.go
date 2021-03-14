@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	logger "xapiens-bootcamp-golang/day-13/log"
 
 	"github.com/gin-gonic/gin"
 )
@@ -42,23 +43,34 @@ func (StrDB *StrDB) AddReview(c *gin.Context) {
 	reviews.Review = review
 	reviews.Rate = int(rate)
 
-	StrDB.DB.Create(&reviews)
-	fmt.Println(reviews)
-	StrDB.DB.Preload("Users").Preload("Movies").First(&reviews)
-	// StrDB.DB.Table("users").Select("users.full_name, users.email").Joins("Users").Joins("Movies").Find(&reviews)
-	result = gin.H{
-		"status":  "success",
-		"message": "Sucessfully Add Reviews For this Movie!",
-		"data": map[string]interface{}{
-			"id":     reviews.ID,
-			"movie":  reviews.Movies,
-			"user":   reviews.Users,
-			"review": reviews.Review,
-			"rate":   reviews.Rate,
-		},
+	if res := StrDB.DB.Create(&reviews); res.Error != nil {
+		err := res.Error
+		result = gin.H{
+			"status":  "Bad Request",
+			"message": "Cant Process the Data!",
+			"errors":  err.Error(),
+		}
+		c.JSON(http.StatusBadRequest, result)
+		logger.Sentry(err)
+	} else {
+		fmt.Println(reviews)
+		StrDB.DB.Preload("Users").Preload("Movies").First(&reviews)
+		// StrDB.DB.Table("users").Select("users.full_name, users.email").Joins("Users").Joins("Movies").Find(&reviews)
+		result = gin.H{
+			"status":  "success",
+			"message": "Sucessfully Add Reviews For this Movie!",
+			"data": map[string]interface{}{
+				"id":     reviews.ID,
+				"movie":  reviews.Movies,
+				"user":   reviews.Users,
+				"review": reviews.Review,
+				"rate":   reviews.Rate,
+			},
+		}
+
+		c.JSON(http.StatusOK, result)
 	}
 
-	c.JSON(http.StatusOK, result)
 }
 
 // GetReviewByMovie func
@@ -87,14 +99,26 @@ func (StrDB *StrDB) GetReviewByMovie(c *gin.Context) {
 	)
 
 	movieID := c.Param("movie_id")
-	StrDB.DB.Preload("Users").Find(&reviews, "movie_id = ?", movieID)
-	result = gin.H{
-		"status":  "success",
-		"message": "Successfully Get Review List",
-		"data":    reviews,
-	}
+	if res := StrDB.DB.Preload("Users").Where("movie_id = ?", movieID).Find(&reviews); res.Error != nil {
+		err := res.Error
+		result = gin.H{
+			"status":  "Not Fpund!",
+			"message": "Cant Find Data!",
+			"errors":  err.Error(),
+		}
+		c.JSON(http.StatusNotFound, result)
+		logger.Sentry(err)
+	} else {
+		result = gin.H{
+			"status":  "success",
+			"message": "Successfully Get Review List",
+			"data":    reviews,
+		}
 
-	c.JSON(http.StatusOK, result)
+		c.JSON(http.StatusOK, result)
+	}
+	// StrDB.DB.Preload("Users").Find(&reviews, "movie_id = ?", movieID)
+
 }
 
 // GetReviewDetail func
@@ -123,12 +147,22 @@ func (StrDB *StrDB) GetReviewDetail(c *gin.Context) {
 	)
 
 	reviewID := c.Param("review_id")
-	StrDB.DB.Preload("Users").Preload("Movies").Find(&reviews, "id = ?", reviewID)
-	result = gin.H{
-		"status":  "success",
-		"message": "Successfully Get Review List",
-		"data":    reviews,
-	}
+	if res := StrDB.DB.Preload("Movies").Where("id = ?", reviewID).Find(&reviews); res.Error != nil {
+		err := res.Error
+		result = gin.H{
+			"status":  "Not Fpund!",
+			"message": "Cant Find Data!",
+			"errors":  err.Error(),
+		}
+		c.JSON(http.StatusNotFound, result)
+		logger.Sentry(err)
+	} else {
+		result = gin.H{
+			"status":  "success",
+			"message": "Successfully Get Review Detail",
+			"data":    reviews,
+		}
 
-	c.JSON(http.StatusOK, result)
+		c.JSON(http.StatusOK, result)
+	}
 }
