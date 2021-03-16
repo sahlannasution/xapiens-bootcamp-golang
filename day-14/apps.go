@@ -42,28 +42,28 @@ func main() {
 	movie_reviews.Use(strDB.MiddleWare().MiddlewareFunc())
 	{
 		/* User Routes */
-		routing.GET("/user/:email", strDB.GetUserData)
-		routing.PUT("/user/:email", strDB.UpdateUser)
+		movie_reviews.GET("/user/:email", strDB.GetUserData)
+		movie_reviews.PUT("/user/:email", strDB.UpdateUser)
 		/* End User Routes */
 
 		/* Movies Routes */
-		routing.POST("/movies", strDB.AddMovies)
-		routing.GET("/movies", strDB.GetMoviesList)
+		movie_reviews.POST("/movies", strDB.AddMovies)
+		movie_reviews.GET("/movies", strDB.GetMoviesList)
 		/* End Movies Routes */
 
 		/* Genre Routes */
-		routing.POST("/genre", strDB.AddGenre)
-		routing.GET("/genre", strDB.GetGenresList)
+		movie_reviews.POST("/genre", strDB.AddGenre)
+		movie_reviews.GET("/genre", strDB.GetGenresList)
 		/* End Genre Routes */
 
 		/* Movies Genre Routes */
-		routing.POST("/movies/genre", strDB.AddMoviesGenre)
+		movie_reviews.POST("/movies/genre", strDB.AddMoviesGenre)
 		/* End Movies Genre Routes */
 
 		/* Review Routes */
-		routing.POST("/review", strDB.AddReview)
-		routing.GET("/review/:movie_id", strDB.GetReviewByMovie)
-		routing.GET("/reviews/detail/:review_id", strDB.GetReviewDetail)
+		movie_reviews.POST("/review", strDB.AddReview)
+		movie_reviews.GET("/review/:movie_id", strDB.GetReviewByMovie)
+		movie_reviews.GET("/reviews/detail/:review_id", strDB.GetReviewDetail)
 		/* End Review Routes */
 	}
 
