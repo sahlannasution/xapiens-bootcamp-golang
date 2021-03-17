@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"time"
@@ -19,7 +20,7 @@ type login struct {
 }
 
 type users struct {
-	Email    string
+	ID       string
 	FullName string
 	Role     string
 }
@@ -53,14 +54,14 @@ func (StrDB *StrDB) MiddleWare() (mw *jwt.GinJWTMiddleware) {
 			}
 			return jwt.MapClaims{}
 		},
-		IdentityHandler: func(c *gin.Context) interface{} {
-			claims := jwt.ExtractClaims(c)
-			return &users{
-				Email:    claims[identityKey].(string),
-				FullName: claims["fullName"].(string),
-				Role:     claims["role"].(string),
-			}
-		},
+		// IdentityHandler: func(c *gin.Context) interface{} {
+		// 	claims := jwt.ExtractClaims(c)
+		// 	return &users{
+		// 		ID:       claims[identityKey].(string),
+		// 		FullName: claims["fullName"].(string),
+		// 		Role:     claims["role"].(string),
+		// 	}
+		// },
 		Authenticator: func(c *gin.Context) (interface{}, error) {
 
 			// baca dari json di raw data
@@ -88,8 +89,10 @@ func (StrDB *StrDB) MiddleWare() (mw *jwt.GinJWTMiddleware) {
 
 		// menentukan role nya
 		Authorizator: func(data interface{}, c *gin.Context) bool {
+			fmt.Println()
 			method := c.Request.Method
 			claims := jwt.ExtractClaims(c)
+			// fmt.Println("Masuk authorizator", claims["role"])
 			var result bool
 			if claims["role"] == "admin" {
 				result = true
@@ -102,7 +105,7 @@ func (StrDB *StrDB) MiddleWare() (mw *jwt.GinJWTMiddleware) {
 			} else {
 				result = false
 			}
-
+			// fmt.Println("Ini result nya", result)
 			return result
 		},
 		Unauthorized: func(c *gin.Context, code int, message string) {

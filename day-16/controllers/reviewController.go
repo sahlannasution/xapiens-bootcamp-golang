@@ -59,6 +59,7 @@ func (StrDB *StrDB) GetReviewByMovie(c *gin.Context) {
 
 	movieID := c.Param("movie_id")
 	key := fmt.Sprintf("ReviewByMovie_%s", movieID)
+	// fmt.Println("masuk controller")
 	if check, data := CheckRedis(key); check != false {
 		if err := json.Unmarshal(data, &reviews); err != nil {
 			fmt.Println("Error", err.Error())
