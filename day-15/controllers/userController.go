@@ -2,11 +2,13 @@ package controllers
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	logger "xapiens-bootcamp-golang/day-15/log"
 	"xapiens-bootcamp-golang/day-15/models"
 
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // Users struct
@@ -23,7 +25,6 @@ func (StrDB *StrDB) Register(c *gin.Context) {
 		users  models.Users
 		result gin.H
 	)
-	// fmt.Println(c.Bind(&users))
 	if err := c.Bind(&users); err != nil || users.Email == "" || users.Password == "" || users.FullName == "" || users.Role == "" {
 		e := "Field Email, Password, FullName, Role is required!"
 		result = gin.H{
@@ -35,7 +36,12 @@ func (StrDB *StrDB) Register(c *gin.Context) {
 
 		logger.Sentry(err) // push log error ke sentry
 	} else {
-
+		encrypt, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+		if err != nil {
+			log.Println(err)
+			logger.Sentry(err)
+		}
+		users.Password = string(encrypt)
 		if res := StrDB.DB.Create(&users); res.Error != nil {
 			err := res.Error
 			c.JSON(http.StatusBadRequest, gin.H{
@@ -74,7 +80,7 @@ func (StrDB *StrDB) Signin(c *gin.Context) {
 			"status":  "bad request",
 			"message": err,
 		})
-		// logger.Sentry(err)
+		logger.SentryStr(err)
 	} else {
 		if res := StrDB.DB.Where("email = ? AND  password = ?", email, password).First(&users); res.Error != nil {
 			err := res.Error
@@ -112,7 +118,7 @@ func (StrDB *StrDB) GetUserData(c *gin.Context) {
 			"status":  "bad request",
 			"message": err,
 		})
-		// logger.Sentry(err)
+		logger.SentryStr(err)
 	} else {
 		if res := StrDB.DB.Where("email = ?", email).First(&users); res.Error != nil {
 			err := res.Error

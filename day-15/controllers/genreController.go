@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"net/http"
-	logger "xapiens-bootcamp-golang/day-14/log"
-	"xapiens-bootcamp-golang/day-14/models"
+	logger "xapiens-bootcamp-golang/day-15/log"
+	"xapiens-bootcamp-golang/day-15/models"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,7 +23,7 @@ func (StrDB *StrDB) AddGenre(c *gin.Context) {
 	name := c.PostForm("name")
 
 	if name == "" {
-		e := "Field is required!"
+		e := "Field name is required!"
 		result = gin.H{
 			"status":  "bad request",
 			"message": e,
@@ -31,7 +31,7 @@ func (StrDB *StrDB) AddGenre(c *gin.Context) {
 		// fmt.Println("Field Email, Password, FullName, Role is required!")
 		c.JSON(http.StatusBadRequest, result)
 
-		// logger.Sentry(err) // push log error ke sentry
+		logger.SentryStr(e) // push log error ke sentry
 	} else {
 		genre.Name = name
 		if res := StrDB.DB.Create(&genre); res.Error != nil {

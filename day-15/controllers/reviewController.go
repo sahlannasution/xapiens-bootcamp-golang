@@ -12,24 +12,6 @@ import (
 
 // AddReview func
 func (StrDB *StrDB) AddReview(c *gin.Context) {
-
-	// // Users struct
-	// type Users struct {
-	// 	ID       string `gorm:"primarykey" json:"id"`
-	// 	Email    string `gorm:"primarykey" json:"email"`
-	// 	FullName string `json:"fullName"`
-	// 	Role     string `json:"role"`
-	// }
-	// // // Reviews struct
-	// type Reviews struct {
-	// 	ID      uint   `gorm:"primarykey, autoIncrement" json:"id"`
-	// 	Review  string `json:"review"`
-	// 	Rate    int    `json:"rate"`
-	// 	UserID  int    `json:"user_id"`
-	// 	Users   Users  `gorm:"foreignKey:ID" json:"user"`
-	// 	MovieID int    `json:"movie_id"`
-	// 	Movies  Movies `gorm:"foreignKey:ID" json:"movie"`
-	// }
 	var (
 		reviews models.Reviews
 		result  gin.H
@@ -55,19 +37,10 @@ func (StrDB *StrDB) AddReview(c *gin.Context) {
 		logger.Sentry(err)
 	} else {
 		fmt.Println(reviews)
-		// StrDB.DB.Preload("Users").Preload("Movies").First(&reviews)
-		// StrDB.DB.Table("users").Select("users.full_name, users.email").Joins("Users").Joins("Movies").Find(&reviews)
 		result = gin.H{
 			"status":  "success",
 			"message": "Sucessfully Add Reviews For this Movie!",
 			"data":    reviews,
-			// "data": map[string]interface{}{
-			// 	"id":     reviews.ID,
-			// 	"movies": reviews.Movies,
-			// 	"users":  reviews.Users,
-			// 	"review": reviews.Review,
-			// 	"rate":   reviews.Rate,
-			// },
 		}
 
 		c.JSON(http.StatusOK, result)
@@ -102,7 +75,6 @@ func (StrDB *StrDB) GetReviewByMovie(c *gin.Context) {
 
 		c.JSON(http.StatusOK, result)
 	}
-	// StrDB.DB.Preload("Users").Find(&reviews, "movie_id = ?", movieID)
 
 }
 

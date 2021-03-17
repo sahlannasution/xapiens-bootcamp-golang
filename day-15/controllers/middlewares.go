@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 	"time"
-	logger "xapiens-bootcamp-golang/day-13/log"
+	logger "xapiens-bootcamp-golang/day-15/log"
 	"xapiens-bootcamp-golang/day-15/models"
 
 	jwt "github.com/appleboy/gin-jwt/v2"
@@ -106,6 +106,7 @@ func (StrDB *StrDB) MiddleWare() (mw *jwt.GinJWTMiddleware) {
 			return result
 		},
 		Unauthorized: func(c *gin.Context, code int, message string) {
+			logger.SentryStr(message)
 			c.JSON(code, gin.H{
 				"code":    code,
 				"message": message,
