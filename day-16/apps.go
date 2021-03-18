@@ -6,7 +6,7 @@ import (
 	"xapiens-bootcamp-golang/day-16/controllers"
 	"xapiens-bootcamp-golang/day-16/models"
 
-	jwt "github.com/appleboy/gin-jwt"
+	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 )
 
