@@ -17,6 +17,7 @@ require (
 	github.com/iris-contrib/formBinder v5.0.0+incompatible // indirect
 	github.com/iris-contrib/httpexpect v0.0.0-20180314041918-ebe99fcebbce // indirect
 	github.com/jackc/pgproto3/v2 v2.0.7 // indirect
+	github.com/jasonlvhit/gocron v0.0.1 // indirect
 	github.com/joho/godotenv v1.3.0 // indirect
 	github.com/json-iterator/go v1.1.10 // indirect
 	github.com/kataras/iris v11.1.1+incompatible // indirect
