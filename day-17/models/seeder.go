@@ -117,13 +117,13 @@ func SeederGenre(db *gorm.DB) {
 
 func SeederUser(db *gorm.DB) {
 	var userArray = [...][5]string{
-		{"Sahlan.Nasution@xapiens.id", "admin@1234", "Sahlan Admin Xapiens", "admin", "1"},
-		// {"sahlan.nasution07@gmail.com", "guest@1234", "Sahlan Nasution", "guest", "1"},
-		// {"zahland.nasution@gmail.com", "guest@1234", "Sahlan NST", "guest", "1"},
-		{"armanzulfikri@mail.com", "guest@1234", "Arman Zulfikri", "guest", "1"},
-		{"wawan_setiawan@mail.com", "guest@1234", "Wawan Setiawan", "guest", "1"},
-		{"mas.dimas@mail.com", "guest@1234", "Mas Dimas", "guest", "1"},
-		{"dimas.maskun@mail.com", "guest@1234", "Dimas Chan wkwk", "guest", "1"},
+		{"Sahlan.Nasution@xapiens.id", "admin@1234", "Sahlan Admin Xapiens", "admin"},
+		// {"sahlan.nasution07@gmail.com", "guest@1234", "Sahlan Nasution", "guest"},
+		// {"zahland.nasution@gmail.com", "guest@1234", "Sahlan NST", "guest"},
+		{"armanzulfikri@mail.com", "guest@1234", "Arman Zulfikri", "guest"},
+		{"wawan_setiawan@mail.com", "guest@1234", "Wawan Setiawan", "guest"},
+		{"mas.dimas@mail.com", "guest@1234", "Mas Dimas", "guest"},
+		{"dimas.maskun@mail.com", "guest@1234", "Dimas Chan wkwk", "guest"},
 	}
 
 	var user Users
@@ -134,8 +134,8 @@ func SeederUser(db *gorm.DB) {
 		user.Password = data[1]
 		user.FullName = data[2]
 		user.Role = data[3]
-		status, _ := strconv.ParseInt(data[4], 10, 64)
-		user.Status = int(status)
+		// status, _ := strconv.ParseInt(data[4], 10, 64)
+		// user.Status = int(status)
 
 		// Encrypt Password using Bcrypt
 		encrypt, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)

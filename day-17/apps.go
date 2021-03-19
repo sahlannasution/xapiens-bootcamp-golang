@@ -1,12 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"log"
-	"time"
 	"xapiens-bootcamp-golang/day-17/config"
 	"xapiens-bootcamp-golang/day-17/controllers"
-	"xapiens-bootcamp-golang/day-17/helpers"
 	"xapiens-bootcamp-golang/day-17/models"
 
 	jwt "github.com/appleboy/gin-jwt/v2"
@@ -22,11 +19,16 @@ import (
 // 	Status      bool      `json:"status"`
 // 	DeliveredAt time.Time `json:"delivered_at"`
 // }
+// StrDB struct
+// type StrinDB struct {
+// 	DataB *gorm.DB
+// }
 
 func main() {
 	// Db Connections
 	dbPG := config.Connection()
 	StrDB := controllers.StrDB{DB: dbPG}
+	// StrinDB := StrinDB{DataB: dbPG}
 
 	// Migrate models to DB Postgre
 	models.Migrations(dbPG)
@@ -84,7 +86,7 @@ func main() {
 
 	go func() {
 
-		gocron.Every(2).Minutes().Do(Job)
+		gocron.Every(1).Minute().Do(StrDB.Job)
 		<-gocron.Start()
 	}()
 	routing.Run(":6969")
@@ -94,22 +96,3 @@ func main() {
 // func cronJob() {
 
 // }
-
-func Job() {
-	var (
-		mail []models.RegistMailer
-	)
-	dbPG := config.Connection()
-	strDB := controllers.StrDB{DB: dbPG}
-
-	strDB.DB.Where("status = ?", false).Find(&mail)
-
-	fmt.Println(len(mail))
-
-	for i := 0; i < len(mail); i++ {
-		helpers.RegisterMailer(mail[i].Email, mail[i].Message)
-		mail[i].Status = true
-		mail[i].DeliveredAt = time.Now()
-		strDB.DB.Save(&mail[i])
-	}
-}
