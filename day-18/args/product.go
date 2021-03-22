@@ -3,7 +3,7 @@ package args
 import "github.com/graphql-go/graphql"
 
 func GetProductArgs() graphql.FieldConfigArgument {
-	return graphql.FieldConfigArgument{ // untuk param
+	return graphql.FieldConfigArgument{
 		"id": &graphql.ArgumentConfig{
 			Type: graphql.Int,
 		},
@@ -11,7 +11,7 @@ func GetProductArgs() graphql.FieldConfigArgument {
 }
 
 func CreateProductArgs() graphql.FieldConfigArgument {
-	return graphql.FieldConfigArgument{ // untuk param
+	return graphql.FieldConfigArgument{
 		"name": &graphql.ArgumentConfig{
 			Type: graphql.String,
 		},
@@ -25,8 +25,8 @@ func CreateProductArgs() graphql.FieldConfigArgument {
 }
 
 func UpdateProductArgs() graphql.FieldConfigArgument {
-	return graphql.FieldConfigArgument{ // untuk param
-		"id": &graphql.ArgumentConfig{ // id nggak boleh kosong
+	return graphql.FieldConfigArgument{
+		"id": &graphql.ArgumentConfig{ // id cannot empty
 			Type: graphql.NewNonNull(graphql.Int),
 		},
 		"name": &graphql.ArgumentConfig{
@@ -42,8 +42,8 @@ func UpdateProductArgs() graphql.FieldConfigArgument {
 }
 
 func DeleteProductArgs() graphql.FieldConfigArgument {
-	return graphql.FieldConfigArgument{ // untuk param
-		"id": &graphql.ArgumentConfig{ // id nggak boleh kosong
+	return graphql.FieldConfigArgument{
+		"id": &graphql.ArgumentConfig{ // id cannot empty
 			Type: graphql.NewNonNull(graphql.Int),
 		},
 		"name": &graphql.ArgumentConfig{

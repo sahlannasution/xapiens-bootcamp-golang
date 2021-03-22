@@ -2,6 +2,7 @@ package types
 
 import "github.com/graphql-go/graphql"
 
+// func ProductType
 func ProductType() *graphql.Object {
 	return graphql.NewObject(
 		graphql.ObjectConfig{
@@ -23,7 +24,3 @@ func ProductType() *graphql.Object {
 		},
 	)
 }
-
-// var productType = graphql.NewObject(
-
-// )

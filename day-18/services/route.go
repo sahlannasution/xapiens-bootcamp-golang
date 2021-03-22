@@ -6,22 +6,22 @@ import (
 	"github.com/graphql-go/graphql"
 )
 
-// semacam routing di rest
+// Define schema for route
 var Schema, _ = graphql.NewSchema(
 	graphql.SchemaConfig{
-		Query:    queryType,    // query itu hanya untuk get data
-		Mutation: mutationType, //ini untuk Create Update Delete
+		Query:    queryType,    // Define query type for get data
+		Mutation: mutationType, // Define mutation type for create, update, delete
 	},
 )
 
-// function untuk execute query
+// func ExecuteQuery
 func ExecuteQuery(query string, schema graphql.Schema) *graphql.Result {
 	result := graphql.Do(graphql.Params{
 		Schema:        schema,
 		RequestString: query,
 	})
 
-	// check error condition saat run var result
+	// if error
 	if len(result.Errors) > 0 {
 		fmt.Println("ada error : ", result.Errors)
 	}

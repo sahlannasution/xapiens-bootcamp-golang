@@ -1,7 +1,6 @@
 package resolver
 
 import (
-	"log"
 	"math/rand"
 	"time"
 	"xapiens-bootcamp-golang/day-18/models"
@@ -9,7 +8,7 @@ import (
 	"github.com/graphql-go/graphql"
 )
 
-// var product = models.
+// Define slice Product Data from ProductModels
 var Product = []models.ProductModels{
 	{
 		ID:    1,
@@ -31,80 +30,76 @@ var Product = []models.ProductModels{
 	},
 }
 
+// func GetProductList
 func GetProductList(params graphql.ResolveParams) (interface{}, error) {
-	return Product, nil
+	return Product, nil //return Product slice
 }
 
 func GetProduct(params graphql.ResolveParams) (interface{}, error) {
-	id, ok := params.Args["id"].(int)
+
+	id, ok := params.Args["id"].(int) // Get id from params arguments
+	// if ok, find data in slice Product
 	if ok {
-		for _, products := range Product { // looping data dari slice product
-			// lakukan pengecekan jika sama id di args == id di slice product
-			// maka tampilkan data
-			if int(products.ID) == id {
-				return products, nil
+		for _, products := range Product {
+			if int(products.ID) == id { // if id find in slice
+				return products, nil // return product detail
 			}
 		}
 	}
-	return nil, nil
+	return nil, nil // else return no data
 }
 
 func CreateProduct(p graphql.ResolveParams) (interface{}, error) {
-	rand.Seed(time.Now().UnixNano()) // ini untuk generate random value
+	rand.Seed(time.Now().UnixNano()) // generate random value for id
 
-	// bikin variable untuk parse data ke struct Product
+	// create variable using models ProductModels and define the value
 	add := models.ProductModels{
 		ID:    int64(rand.Intn(1000)),
 		Name:  p.Args["name"].(string),
 		Info:  p.Args["info"].(string),
 		Price: p.Args["price"].(float64),
 	}
-	Product = append(Product, add) //ini untuk nambah data di database (var product)
-	return add, nil                // untuk response yang akan ditampilkan
+	Product = append(Product, add) // append the struct to slice Product
+	return add, nil                // send new data response
 }
 
 func UpdateProduct(p graphql.ResolveParams) (interface{}, error) {
-	// ambil id nya terlebih dahulu, masukan ke dalam sebuah variable
-	id := p.Args["id"].(int)
-	name, checkName := p.Args["name"].(string)
-	info, checkInfo := p.Args["info"].(string)
-	price, checkPrice := p.Args["price"].(float64)
+	id := p.Args["id"].(int)                       // get id from params arguments
+	name, checkName := p.Args["name"].(string)     // get name from params arguments
+	info, checkInfo := p.Args["info"].(string)     // get info from params arguments
+	price, checkPrice := p.Args["price"].(float64) // get price from params arguments
 
-	log.Println("ini argsnyaa......", p.Args["name"].(string))
+	productVar := models.ProductModels{} // Define productVar to patch newData
 
-	productVar := models.ProductModels{}
-
-	for i, v := range Product { // product adalah database
-		if id == int(v.ID) { // ketika id di database sama dengan args
+	for i, v := range Product { // find data
+		if id == int(v.ID) { // if id finded
 			if checkName {
-				Product[i].Name = name
+				Product[i].Name = name // change data
 			}
 			if checkInfo {
-				Product[i].Info = info
+				Product[i].Info = info // change data
 			}
 			if checkPrice {
-				Product[i].Price = price
+				Product[i].Price = price // change data
 			}
-			productVar = Product[i]
-			break
+			productVar = Product[i] // patch data to productVar
+			break                   // break loop
 		}
 	}
-	return productVar, nil // untuk response yang akan ditampilkan
+	return productVar, nil // send new data to response
 }
 
 func DeleteProduct(p graphql.ResolveParams) (interface{}, error) {
-	// ambil id nya terlebih dahulu, masukan ke dalam sebuah variable
-	id := p.Args["id"].(int)
+	id := p.Args["id"].(int) // get id from params arguments
 
-	productVar := models.ProductModels{}
+	productVar := models.ProductModels{} // define struct to patch deleted data
 
-	for i, v := range Product { // product adalah database
-		if id == int(v.ID) { // kalau data id dari database == data id dari args
+	for i, v := range Product { // find in slice Product
+		if id == int(v.ID) { // if id finded do this
 			productVar = Product[i]
-			// untuk hapus bisa menggunakan slice
-			Product = append(Product[:i], Product[i+1:]...) // ini untuk hapus data dengan penerapan slice
-			log.Println("ini Productnya....", Product)
+			// remove data from slice
+			Product = append(Product[:i], Product[i+1:]...)
 		}
 	}
-	return productVar, nil // untuk response yang akan ditampilkan
+	return productVar, nil // send deleted data to response
 }

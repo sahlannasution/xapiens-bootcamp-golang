@@ -12,21 +12,19 @@ var queryType = graphql.NewObject(
 	graphql.ObjectConfig{
 		Name: "Query",
 		Fields: graphql.Fields{
-			// get all data product
-			// url nya localhost:8080/?Query={list{id, name, info, price}}
+			// Get All Product Data
+			// URL : localhost:8080/?Query={getProductList{id, name, info, price}}
 			"getProductList": &graphql.Field{
-				Type: graphql.NewList(types.ProductType()),
-				// kalau di rest resolve itu kayak controller
-				Resolve: resolver.GetProductList,
+				Type:    graphql.NewList(types.ProductType()), // Define Product Type
+				Resolve: resolver.GetProductList,              // Call GetProducList resolver function
 			},
 
-			// get data with param
-			// url untuk akses endpointnya localhost:8080/?Query={product(id:1){id, info, name, price}}
+			// Get Product By Id
+			// url localhost:8080/?Query={getProduct(id:1){id, info, name, price}}
 			"getProduct": &graphql.Field{
-				Type: types.ProductType(),
-				Args: args.GetProductArgs(),
-				// kalau di rest resolve itu kayak controller
-				Resolve: resolver.GetProduct,
+				Type:    types.ProductType(),   // Define Product Type
+				Args:    args.GetProductArgs(), // Define Arguments to getProduct
+				Resolve: resolver.GetProduct,   // Call GetProduct resolver function
 			},
 		},
 	},

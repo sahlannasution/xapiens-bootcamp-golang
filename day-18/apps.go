@@ -9,17 +9,19 @@ import (
 
 func main() {
 	route := gin.Default()
-	// routing "/" ibarat di rest seperti group
+
+	// Define route
 	route.POST("/", func(c *gin.Context) {
+		// Struvt Query
 		type Query struct {
 			Query string `json:"query"`
 		}
 
 		var query Query
 
-		c.Bind(&query)
-		result := services.ExecuteQuery(query.Query, services.Schema)
-		c.JSON(http.StatusOK, result)
+		c.Bind(&query)                                                // Get query params
+		result := services.ExecuteQuery(query.Query, services.Schema) // Run Query
+		c.JSON(http.StatusOK, result)                                 // Send Response
 	})
 
 	route.Run()
