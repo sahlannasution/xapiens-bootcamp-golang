@@ -28,7 +28,7 @@ var mutationType = graphql.NewObject(
 
 			"deleteProduct": &graphql.Field{
 				Type:    types.ProductType(),      // Define ProductType
-				Args:    args.DeleteProductArgs(), // Define Delete Product Arguments (params to delete)
+				Args:    args.DeleteProductArgs(), // Define Delete Product Arguments (params to add)
 				Resolve: resolver.DeleteProduct,   // Call DeleteProduct resolver function
 			},
 		},
