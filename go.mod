@@ -14,6 +14,7 @@ require (
 	github.com/golang/protobuf v1.4.3 // indirect
 	github.com/gomodule/redigo v1.8.4 // indirect
 	github.com/gorilla/schema v1.1.0 // indirect
+	github.com/graphql-go/graphql v0.7.9 // indirect
 	github.com/iris-contrib/formBinder v5.0.0+incompatible // indirect
 	github.com/iris-contrib/httpexpect v0.0.0-20180314041918-ebe99fcebbce // indirect
 	github.com/jackc/pgproto3/v2 v2.0.7 // indirect
