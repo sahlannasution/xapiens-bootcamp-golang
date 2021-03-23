@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 	"xapiens-bootcamp-golang/day-19/config"
+	"xapiens-bootcamp-golang/day-19/middlewares"
 	"xapiens-bootcamp-golang/day-19/migrator"
 	"xapiens-bootcamp-golang/day-19/routes"
 	"xapiens-bootcamp-golang/day-19/schema"
@@ -12,7 +13,8 @@ import (
 )
 
 func main() {
-	dbPG := config.Connection()     // db Connection
+	dbPG := config.Connection() // db Connection
+	StrDB := middlewares.StrDB{DB: dbPG}
 	migrator.Migrations(dbPG)       // migrate tables
 	seeder.SeederUser(dbPG)         // seed Users Data
 	seeder.SeederGenres(dbPG)       // seed Genres Data
@@ -21,9 +23,11 @@ func main() {
 	seeder.SeederReview(dbPG)       // seed Reviews Data
 
 	route := gin.Default()
+	/* User Signin */
+	route.POST("/signin", StrDB.MiddleWare().LoginHandler)
 
 	// Define route
-	route.POST("/", func(c *gin.Context) {
+	route.POST("/", StrDB.MiddleWare().MiddlewareFunc(), func(c *gin.Context) {
 		// Struvt Query
 		type Query struct {
 			Query string `json:"query"`
@@ -31,10 +35,10 @@ func main() {
 
 		var query Query
 
-		c.Bind(&query)                                            // Get query params
+		c.Bind(&query) // Get query params
+
 		result := routes.ExecuteQuery(query.Query, schema.Schema) // Run Query
 		c.JSON(http.StatusOK, result)                             // Send Response
 	})
-
 	route.Run()
 }
