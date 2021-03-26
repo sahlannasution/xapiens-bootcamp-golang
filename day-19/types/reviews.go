@@ -21,6 +21,12 @@ var ReviewType = graphql.NewObject(
 			"movies_id": &graphql.Field{
 				Type: graphql.ID,
 			},
+			"movies": &graphql.Field{
+				Type: MoviesType,
+			},
+			"users": &graphql.Field{
+				Type: UserType,
+			},
 		},
 	},
 )

@@ -1,12 +1,12 @@
-package middlewares
+package controllers
 
 import (
 	"fmt"
 	"log"
 	"os"
 	"time"
-	logger "xapiens-bootcamp-golang/day-19/log"
-	"xapiens-bootcamp-golang/day-19/models"
+	logger "xapiens-bootcamp-golang/gogorm/log"
+	"xapiens-bootcamp-golang/gogorm/models"
 
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
@@ -33,7 +33,7 @@ var (
 )
 
 func (StrDB *StrDB) MiddleWare() (mw *jwt.GinJWTMiddleware) {
-	// dbPG := config.Connection()
+
 	if err := godotenv.Load(".env"); err != nil {
 		log.Println("ENV File Not Found!")
 	}
@@ -41,8 +41,8 @@ func (StrDB *StrDB) MiddleWare() (mw *jwt.GinJWTMiddleware) {
 	authMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
 		Realm:       "test zone",
 		Key:         []byte(os.Getenv("SECRET_KEY")),
-		Timeout:     time.Hour, // SET TIME EXPIRED TO 1 Hour
-		MaxRefresh:  time.Hour, // SET TIME EXPIRED TO 1 Hour
+		Timeout:     time.Minute * 15, // SET TIME EXPIRED TO 15 MINUTE
+		MaxRefresh:  time.Minute * 15, // SET TIME EXPIRED TO 15 MINUTE
 		IdentityKey: identityKey,
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			if v, ok := data.(*models.Users); ok {
@@ -90,12 +90,18 @@ func (StrDB *StrDB) MiddleWare() (mw *jwt.GinJWTMiddleware) {
 		// menentukan role nya
 		Authorizator: func(data interface{}, c *gin.Context) bool {
 			fmt.Println()
-			// method := c.Request.Method
+			method := c.Request.Method
 			claims := jwt.ExtractClaims(c)
 			// fmt.Println("Masuk authorizator", claims["role"])
 			var result bool
-			if claims["role"] == "admin" || claims["role"] == "guest" {
+			if claims["role"] == "admin" {
 				result = true
+			} else if claims["role"] == "guest" {
+				if method != "GET" {
+					result = false
+				} else {
+					result = true
+				}
 			} else {
 				result = false
 			}

@@ -13,11 +13,11 @@ func GetReviewByMovie(params graphql.ResolveParams) (interface{}, error) {
 	dbPG := config.Connection()
 
 	var (
-		review []models.Reviews
+		reviews []models.Reviews
 	)
 	if ok {
-		dbPG.Where("movies_id = ?", movies_id).Find(&review)
-		return review, nil //return review data response
+		dbPG.Where("movies_id = ?", movies_id).Preload("Movies").Preload("Users").Find(&reviews)
+		return reviews, nil //return review data response
 	}
 	return nil, nil
 

@@ -14,7 +14,7 @@ func AddMoviesGenres(params graphql.ResolveParams) (interface{}, error) {
 	dbPG := config.Connection()
 	// movies struct
 	var (
-		moviesGenres models.MoviesGenres
+		moviesGenres models.MovieGenres
 	)
 	if checkMovies && checkGenres {
 		moviesGenres.MoviesID = uint(movies_id)

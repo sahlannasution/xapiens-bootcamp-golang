@@ -1,10 +1,9 @@
-package seeder
+package models
 
 import (
 	"fmt"
 	"log"
 	"strconv"
-	"xapiens-bootcamp-golang/day-19/models"
 
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -23,7 +22,7 @@ func SeederReview(db *gorm.DB) {
 		{"3", "6", "gooood", "7"},
 	}
 
-	var review models.Reviews
+	var review Reviews
 
 	for _, data := range reviewArray {
 		// Get Data from Array
@@ -40,8 +39,8 @@ func SeederReview(db *gorm.DB) {
 	fmt.Println("Review Data has been Seed!")
 }
 
-func SeederMoviesGenres(db *gorm.DB) {
-	var moviesGenresArray = [...][2]string{
+func SeederMovieGenre(db *gorm.DB) {
+	var movieGenreArray = [...][2]string{
 		{"1", "4"},
 		{"1", "5"},
 		{"1", "6"},
@@ -53,22 +52,22 @@ func SeederMoviesGenres(db *gorm.DB) {
 		{"3", "7"},
 	}
 
-	var moviesGenres models.MovieGenres
+	var movieGenre MovieGenres
 
-	for _, data := range moviesGenresArray {
+	for _, data := range movieGenreArray {
 		// Get Data from Array
 		movie_id, _ := strconv.ParseInt(data[0], 10, 64)
 		genre_id, _ := strconv.ParseInt(data[1], 10, 64)
-		moviesGenres.MoviesID = uint(movie_id)
-		moviesGenres.GenresID = uint(genre_id)
-		moviesGenres.ID = 0
-		db.Create(&moviesGenres)
+		movieGenre.MovieID = uint(movie_id)
+		movieGenre.GenreID = uint(genre_id)
+		movieGenre.ID = 0 // declare id dimulai dari 0, karena auto increment
+		db.Create(&movieGenre)
 	}
-	fmt.Println("MoviesGenres Data has been Seed!")
+	fmt.Println("Movie Genre Data has been Seed!")
 }
 
-func SeederMovies(db *gorm.DB) {
-	var moviesArray = [...][3]string{
+func SeederMovie(db *gorm.DB) {
+	var movieArray = [...][3]string{
 		{"Parasite", "2019", "0"},
 		{"The Avengers", "2017", "0"},
 		{"Spiderman", "2010", "0"},
@@ -78,23 +77,23 @@ func SeederMovies(db *gorm.DB) {
 		{"Ayat-Ayat Cinta", "2006", "0"},
 	}
 
-	var movies models.Movies
+	var movie Movies
 
-	for _, data := range moviesArray {
+	for _, data := range movieArray {
 		// Get Data from Array
 		year, _ := strconv.ParseInt(data[1], 10, 64)
 		rating, _ := strconv.ParseInt(data[2], 10, 64)
-		movies.Title = data[0]
-		movies.Year = int(year)
-		movies.Ratings = int(rating)
-		movies.ID = 0 // declare id dimulai dari 0, karena auto increment
-		db.Create(&movies)
+		movie.Title = data[0]
+		movie.Year = int(year)
+		movie.Ratings = int(rating)
+		movie.ID = 0 // declare id dimulai dari 0, karena auto increment
+		db.Create(&movie)
 	}
-	fmt.Println("Movies Data has been Seed!")
+	fmt.Println("Movie Data has been Seed!")
 }
 
-func SeederGenres(db *gorm.DB) {
-	var genresArray = [...]string{
+func SeederGenre(db *gorm.DB) {
+	var genreArray = [...]string{
 		"Action",
 		"Sci-Fi",
 		"Mystery",
@@ -105,19 +104,19 @@ func SeederGenres(db *gorm.DB) {
 		"Animation",
 	}
 
-	var genres models.Genres
+	var genre Genres
 
-	for _, data := range genresArray {
+	for _, data := range genreArray {
 		// Get Data from Array
-		genres.Name = data
-		genres.ID = 0
-		db.Create(&genres)
+		genre.Name = data
+		genre.ID = 0 // declare id dimulai dari 0, karena auto increment
+		db.Create(&genre)
 	}
 	fmt.Println("Genre Data has been Seed!")
 }
 
 func SeederUser(db *gorm.DB) {
-	var userArray = [...][4]string{
+	var userArray = [...][5]string{
 		{"Sahlan.Nasution@xapiens.id", "admin@1234", "Sahlan Admin Xapiens", "admin"},
 		// {"sahlan.nasution07@gmail.com", "guest@1234", "Sahlan Nasution", "guest"},
 		// {"zahland.nasution@gmail.com", "guest@1234", "Sahlan NST", "guest"},
@@ -127,7 +126,7 @@ func SeederUser(db *gorm.DB) {
 		{"dimas.maskun@mail.com", "guest@1234", "Dimas Chan wkwk", "guest"},
 	}
 
-	var user models.Users
+	var user Users
 
 	for _, data := range userArray {
 		// Get Data from Array
@@ -135,6 +134,8 @@ func SeederUser(db *gorm.DB) {
 		user.Password = data[1]
 		user.FullName = data[2]
 		user.Role = data[3]
+		// status, _ := strconv.ParseInt(data[4], 10, 64)
+		// user.Status = int(status)
 
 		// Encrypt Password using Bcrypt
 		encrypt, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
